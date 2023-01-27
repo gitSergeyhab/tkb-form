@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Some Title</title>
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <aside class="aside">
+            <h3 class="aside__header">Меню</h3>
+            <ul class="aside__menu-list menu-list">
+                <li class="menu-list__item"> <a href="/" class="menu-list__link"> Пункт 1</a></li>
+                <li class="menu-list__item"> <a href="/" class="menu-list__link"> Пункт 2</a></li>
+                <li class="menu-list__item"> <a href="/" class="menu-list__link"> Пункт 3</a></li>
+                <li class="menu-list__item"> <a href="/" class="menu-list__link"> Пункт 4</a></li>
+            </ul>
+        </aside>
+        <header class="header">
+            <input type="search" class="search" placeholder="поиск">
+        </header>
+        <main class="main">
+            <form action="php.php" class="form" method="POST">
+                <div class="form__header">
+                    <div class="form__cell form__cell_header">ФИО</div>
+                    <div class="form__cell form__cell_header">Должность</div>
+                    <div class="form__cell form__cell_header">Возраст</div>
+                    <div class="form__cell form__cell_header">Компетенции</div>
+                </div>
+                <ul class="person-list form__person-list">
+                    <li class="person-list__row">
+                        <div class="person-list__cell">
+                            <input type="text" name="name" class="person-list__input person-list__input_name" placeholder="ФИО" required>
+                            <span class="error-message"></span>
+                        </div>
+                        
+                        <div class="person-list__cell">
+
+                        <select  name="position" class="person-list__input person-list__input_select">
+                            <option value="аналитик">аналитик</option>
+                            <option value="менеджер" selected>менеджер</option>
+                            <option value="программист">программист</option>
+                            <option value="юрист">юрист</option>
+                        </select>
+                        <span class="error-message"></span>
+
+                        </div>
+                        <div class="person-list__cell">
+                            <input min="18" max="99" type="number" name="age" class="person-list__input person-list__input_age" placeholder="Возраст" required>
+                            <span class="error-message"></span>
+
+                        </div>
+                        <div class="person-list__cell person-list__cell_skills">
+                            <textarea name="skills"  class="person-list__text" rows="5" placeholder="Компетенции"></textarea>
+                        </div>
+                        <button type="button" class="person-list__delete-btn"></button>
+                    </li>
+                </ul>
+                <div class="server-message server-message_ok"></div>
+                <div class="server-message server-message_error"></div>
+
+                <div class="form__buttons">
+                    <button type="submit" id="submit" name="submit" class="form__button">Отправить</button>
+                    <button type="button" id="btn-add-item" class="form__button">Добавить</button>
+                </div>
+            </form>
+        </main>
+        <footer class="footer"></footer>
+    </div>
+
+    <template id="new-item">
+        <li class="person-list__row">
+            <div class="person-list__cell">
+                <input type="text" name="name" class="person-list__input person-list__input_name" placeholder="ФИО" required>
+                <span class="error-message"></span>
+            </div>
+            
+            <div class="person-list__cell">
+
+            <select  name="position" class="person-list__input person-list__input_select">
+                <option value="аналитик">аналитик</option>
+                <option value="менеджер" selected>менеджер</option>
+                <option value="программист">программист</option>
+                <option value="юрист">юрист</option>
+            </select>
+            <span class="error-message"></span>
+
+            </div>
+            <div class="person-list__cell">
+                <input min="18" max="99" type="number" name="age" class="person-list__input person-list__input_age" placeholder="Возраст" required>
+                <span class="error-message"></span>
+
+            </div>
+            <div class="person-list__cell person-list__cell_skills">
+                <textarea name="skills"  class="person-list__text" rows="5" placeholder="Компетенции"></textarea>
+            </div>
+            <button type="button" class="person-list__delete-btn"></button>
+        </li>
+    </template>
+    <script src="const.js"></script>
+    <script src="elements.js"></script>
+    <script src="utils.js"></script>
+    <script src="validation.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

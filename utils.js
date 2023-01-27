@@ -1,0 +1,116 @@
+const addTemplateElementToList = () => {
+    const newLi = newItemTemplate.content.cloneNode(true);
+    personList.append(newLi);
+    activateSubmit(true);
+}
+
+const deleteElement = (evt) => {
+    const element = evt.target.closest('.person-list__row');
+    if (evt.target.classList.contains('person-list__delete-btn') && element) {
+        element.remove();
+        if (!form.querySelectorAll('.person-list__row').length) {
+            activateSubmit(false)
+        }
+    }
+}
+
+/**
+ * собирает в массив данные из формы
+ * @param {Element} form 
+ * @returns {string}
+ */
+
+const getJSONArrayFormData = (form) => {
+    const formData = new FormData(form);
+
+    const dataArray = [];
+    let obj = {};
+    for (const [key, value] of formData) {
+        obj[key] = value;
+        if (key === 'skills') {
+            dataArray.push(obj);
+            obj = {};
+        }
+    }
+    return JSON.stringify(dataArray);
+}  
+
+/**
+ * по классу определяет тип инпута
+ * @param {Element} element 
+ * @returns {string | null}
+ */
+const getFieldType = (element) => {
+    const {classList} = element;
+    if (classList.contains('person-list__input_name')) {
+        return InputType.Name
+    }
+
+    if (classList.contains('person-list__input_position')) {
+        return InputType.Position
+    }
+
+    if (classList.contains('person-list__input_age')) {
+        return InputType.Age
+    }
+}
+
+const showServerMessage = (element, text) => {
+    element.textContent = text;
+    setTimeout(() => element.textContent = '', 3000)
+};
+
+const showServerError = () => showServerMessage(messageError, ServerMessage.ServerError);
+const showServerOk = () => showServerMessage(messageOk, ServerMessage.Ok);
+
+const onSuccessPost = (res) => {
+    const {status} = res;
+    if (res.ok) {
+        return res;
+    } 
+    showServerMessage(messageError, ServerMessage.Error)
+    throw new Error(`something went wrong. Error status: ${status}`)
+}
+
+const onErrorPost = (err) => {
+    console.log(err);
+    showServerError()
+}
+
+const onSuccessGetJSON = (data) => {
+    console.log({DataFromServer: data})
+    if (!data) {
+        showServerError();
+        throw new Error(ServerMessage.ServerError)
+    }
+
+    showServerOk();
+    form.reset();
+    const liElements = form.querySelectorAll('.person-list__row');
+    const liCount = liElements.length;
+    if (liCount) {
+        for (let i=0; i < liCount - 1; i++) {
+            liElements[i].remove();
+        }
+    }
+}
+
+
+const postData = ({body}) => {
+    activateSubmit(false);
+    fetch(SERVER_URL, {method: 'POST', body})
+        .then(onSuccessPost)
+        .then((res) => res.json())
+        .then(onSuccessGetJSON)
+        .catch(onErrorPost)
+        .finally(activateSubmit)
+}
+
+const activateSubmit = (active = true) => {
+    if (active) {
+        submitBtn.removeAttribute('disabled');
+    } else {
+        submitBtn.setAttribute('disabled', '');
+    }
+}
+
