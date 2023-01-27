@@ -60,7 +60,7 @@ const showServerMessage = (element, text) => {
     setTimeout(() => element.textContent = '', 3000)
 };
 
-const showServerError = () => showServerMessage(messageError, ServerMessage.ServerError);
+const showServerError = (message) => showServerMessage(messageError, message);
 const showServerOk = () => showServerMessage(messageOk, ServerMessage.Ok);
 
 const onSuccessPost = (res) => {
@@ -68,19 +68,12 @@ const onSuccessPost = (res) => {
     if (res.ok) {
         return res;
     } 
-    showServerMessage(messageError, ServerMessage.Error)
-    throw new Error(`something went wrong. Error status: ${status}`)
+    throw new Error(`Что-то пошло не так. Error status: ${status}`)
 }
 
-const onErrorPost = (err) => {
-    console.log(err);
-    showServerError()
-}
-
-const onSuccessGetJSON = (data) => {
+const onSuccessAll= (data) => {
     console.log({DataFromServer: data})
     if (!data) {
-        showServerError();
         throw new Error(ServerMessage.ServerError)
     }
 
@@ -95,16 +88,14 @@ const onSuccessGetJSON = (data) => {
     }
 }
 
-
-const postData = ({body}) => {
-    activateSubmit(false);
-    fetch(SERVER_URL, {method: 'POST', body})
-        .then(onSuccessPost)
-        .then((res) => res.json())
-        .then(onSuccessGetJSON)
-        .catch(onErrorPost)
-        .finally(activateSubmit)
+const getJSONfromResponse = async(res) => {
+    try {
+        return await res.json()
+    } catch {
+        throw new Error(ServerMessage.ServerError)
+    }
 }
+
 
 const activateSubmit = (active = true) => {
     if (active) {
@@ -114,3 +105,12 @@ const activateSubmit = (active = true) => {
     }
 }
 
+const postData = ({body}) => {
+    activateSubmit(false);
+    fetch(SERVER_URL, {method: 'POST', body})
+        .then(onSuccessPost)
+        .then(getJSONfromResponse)
+        .then(onSuccessAll)
+        .catch(showServerError)
+        .finally(activateSubmit)
+}

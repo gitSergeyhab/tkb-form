@@ -4,7 +4,6 @@ const ErrorMessage = {
     NotCorrectField: 'не корректное значение',
     NotCorrectPosition: 'выберете должность из списка',
     NotCorrectAge: 'возраст должен быть числом - от 18 до 99',
-    NotCorrectLengthSkills: 'хотя бы двадцать символов',
 }
 
 const ServerMessage = {
